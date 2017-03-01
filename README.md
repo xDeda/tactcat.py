@@ -11,13 +11,17 @@ and finally a thing to search youtube from chat (pulls first result (doesn't fil
 
 ### draw.py
 
-Command: draw.py "cool letters" -- no way to interrupt, not all characters supported, see script for which letters/characters
+##### Command: draw.py "cool letters"
+
+no way to interrupt, not all characters supported, see script for which letters/characters
 
 ---
 
 ### ratio.py
 
-Command: ratio.py "[username]" -- returns stats from api.micetigri to your clipboard
+##### Command: ratio.py "[username]"
+
+returns stats from api.micetigri to your clipboard
 
 ---
 
