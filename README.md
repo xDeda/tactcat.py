@@ -28,6 +28,7 @@ returns stats from api.micetigri to your clipboard
 ### tool.py
 
 actually has an interface (wow)
+press E to put a point, press Q to put a split in the line, press Z to draw your tracing back on the screen
 
 ---
 
