@@ -10,6 +10,7 @@ import sys
 draw = ["drawing"]
 draw[0] = []
 n = 0
+togglevar = 0
 
 class Example(Frame):
 
@@ -20,6 +21,15 @@ class Example(Frame):
 		self.initUI()
 
 	def initUI(self):
+
+		def toggleOn():
+			global togglevar
+			if (togglevar == 0):
+				T.configure(state='normal')
+				togglevar = 1
+			else:
+				T.configure(state='disabled')
+				togglevar = 0
 
 		def update():
 			T.configure(state='normal')
@@ -91,6 +101,8 @@ class Example(Frame):
 		okButton.pack(fill=X)
 		splitButton = Button(self, text="Split!", command=split)
 		splitButton.pack(fill=X)
+		enableButton = Button(self, text="Textbox on/off", command=toggleOn)
+		enableButton.pack(fill=X)
 		T = Text(self, height=180, state='disabled')
 		T.pack()
 
