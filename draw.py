@@ -12,6 +12,7 @@ xx1 = pos[0]
 yy1 = pos[1]
 
 # = [,] , [,] , [,] , [,] , [,] , [,] , [,] , [,] , [,] , [,] , [,]
+
 A = [3,22] , [10,0] , [18,22] , [15,14] , [4,14]
 B = [3,1] , [11,1] , [16,5] , [12,10] , [3,11] , [12,10] , [17,16] , [10,22] , [3, 22] , [3,1]
 C = [17,4] , [10,0] , [4,4] , [1,12] , [4,19] , [10,22] , [17,18]
@@ -50,52 +51,44 @@ nine = [15,10] , [12,13] , [9,14] , [5,13] , [3,8] , [4,4] , [9,2] , [12,3] , [1
 dot = [9,18] , [11,20] , [9,22] , [7,20] , [9,18]
 comma = [10,21] , [11,21] , [12,24] , [10,27] , [7,29]
 apostrophe = [11,0] , [10,9]
-exclamation = [10,1] , [10,14]
-exclamation2 = [10,19] , [11,21] , [9,22] , [8,20] , [10,19]
-question = [5,3] , [8,1] , [11,1] , [13,2] , [15,4] , [15,7] , [12,9] , [9,12] , [9,14]
-question2 = [9,19] , [11,21] , [9,22] , [8,21] , [9,19]
-quotation = [7,1] , [6,11]
-quotation2 = [15,1] , [14,11]
+exclamation = [10,1] , [10,14], 5000, [10,19] , [11,21] , [9,22] , [8,20] , [10,19]
+question = [5,3] , [8,1] , [11,1] , [13,2] , [15,4] , [15,7] , [12,9] , [9,12] , [9,14], 5000, [9,19] , [11,21] , [9,22] , [8,21] , [9,19]
+quotation = [7,1] , [6,11], 5000, [15,1] , [14,11]
+
+try:
+    sys.argv[2]
+except NameError:
+    sys.argv[2] = "2"
+ZZ = float(sys.argv[2])
 
 def writeLetter(letter):
 	global xx, yy
 	if (letter == " "):
 		if (xx >= 1100):
-			xx = xx1-20
-			yy = yy+30
-		xx = xx+20
+			xx = xx1-int(20/ZZ)
+			yy = yy+int(30/ZZ)
+		xx = xx+int(20/ZZ)
 	else:
 		n = 1
 		i = len(letter)
-		autopy3.mouse.move(xx+letter[0][0],yy+letter[0][1])
+		autopy3.mouse.move(xx+int(letter[0][0]/ZZ),yy+int(letter[0][1]/ZZ))
 		wait()
 		autopy3.mouse.toggle(True)
 		wait()
 		while (n<i):
-			autopy3.mouse.move(xx+letter[n][0],yy+letter[n][1])
+			if (letter[n] == 5000):
+				autopy3.mouse.toggle(False)
+				autopy3.mouse.move(xx+int(letter[n+1][0]/ZZ),yy+int(letter[n+1][1]/ZZ))
+				autopy3.mouse.toggle(True)
+				wait()
+			else:
+				autopy3.mouse.move(xx+int(letter[n][0]/ZZ),yy+int(letter[n][1]/ZZ))
+				wait()
 			n = n+1
 			wait()
 		autopy3.mouse.toggle(False)
-		if (letter != question):
-			if (letter != exclamation):
-				if (letter != quotation):
-					xx = xx+20
+		xx = xx+int(20/ZZ)
 		wait()
-	return;
-
-def writeExclamation():
-	writeLetter(exclamation)
-	writeLetter(exclamation2)
-	return;
-
-def writeQuestion():
-	writeLetter(question)
-	writeLetter(question2)
-	return;
-
-def writeQuotation():
-	writeLetter(quotation)
-	writeLetter(quotation2)
 	return;
 
 def wait():
@@ -185,11 +178,11 @@ def writeOut(str):
 		elif (str[n] == ","):
 			writeLetter(comma)
 		elif (str[n] == "!"):
-			writeExclamation()
+			writeLetter(exclamation)
 		elif (str[n] == "?"):
-			writeQuestion()
+			writeLetter(question)
 		elif (str[n] == "\""):
-			writeQuotation()
+			writeLetter(quotation)
 		elif (str[n] == "'"):
 			writeLetter(apostrophe)
 		n = n+1
@@ -199,4 +192,4 @@ draw = sys.argv[1].upper()
 
 writeOut(draw)
 
-autopy3.mouse.move(xx1,yy+30)
+autopy3.mouse.move(xx1,yy+int(30/ZZ))
