@@ -4,6 +4,10 @@ E - Draw line to point
 Q - Split line  
 Z - Play back tracing under your cursor (but place up and left from where you want the drawing to be)
 
+![alt text](https://i.imgur.com/FxYOhvl.png "Precise")
+
+![alt text](https://i.imgur.com/mTqvE2t.png "Not as precise ;/")
+
 Hover your cursor over the canvas in the right side and press E to draw lines  
 
 Pressing Q somewhere breaks the line and your next E press will draw from Q to E  
