@@ -1,5 +1,7 @@
 # Drawing App
 
+[**download link**](https://github.com/xDeda/tactcat.py/releases) -> release -> drawingapp.exe
+
 E - Draw line to point  
 Q - Split line  
 Z - Play back tracing under your cursor (but place up and left from where you want the drawing to be)
