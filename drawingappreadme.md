@@ -19,3 +19,5 @@ Press the Update button before pressing Z to adjust your tracing properly
 Z will play back your drawing relative to where you have your mouse cursor, so place it where you want your playback to be  
 
 Z will place your drawing to the right and down from your cursor, meaning the cursor indicates the top left corner of your drawing
+
+![alt text](https://i.imgur.com/HgcxCSr.png ":)")
