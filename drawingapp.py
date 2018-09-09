@@ -3,7 +3,6 @@ import pyautogui
 import math
 
 draw = []
-pos = pyautogui.position()
 fromx = 0
 fromy = 0
 tox = 0
@@ -13,20 +12,22 @@ togglevar = 0
 
 def callback(e):
 	global fromx, fromy, tox, toy, phase, infox, infoy
-	pos = pyautogui.position()
-	pos[0]-infoz[0]
-	pos[1]-infoz[1]
-	infoz = click()
+	pos = [0, 1]
+	pos[0] = master.winfo_pointerx()
+	pos[1] = master.winfo_pointery()
+	infox, infoy = click()
+	
 	if (phase == 0):
-		tox = pos[0]
+		tox = pos[0]-infox
+		toy = pos[1]-infoy
 		w.create_line(fromx, fromy, tox, toy, fill="Black")
-		fromx = pos[0]
-		fromy = pos[1]
+		fromx = pos[0]-infox
+		fromy = pos[1]-infoy
 		draw.append([fromx,fromy])
 		print("(phase 0)",fromx,",",fromy)
 	else:
-		fromx = pos[0]
-		fromy = pos[1]
+		fromx = pos[0]-infox
+		fromy = pos[1]-infoy
 		draw.append([fromx,fromy])
 		print("(1 phase)",fromx,",",fromy)
 		phase = 0
@@ -35,18 +36,69 @@ def callback(e):
 def split(q):
 	global fromx, fromy
 	infoz = click()
-	pos = pyautogui.position()
+	pos = [0, 1]
+	pos[0] = master.winfo_pointerx()
+	pos[1] = master.winfo_pointery()
 	draw.append(5000)
 	fromx = pos[0]-infoz[0]
 	fromy = pos[1]-infoz[1]
 	draw.append([fromx,fromy])
 	print("5000")
 
+def getArray(drawing):
+	n = 0
+	i = len(drawing)
+	print(len(drawing))
+	
+	thethingX = drawing[0][0]
+	thethingY = drawing[0][1]
+	
+	while (n<i):
+		if (drawing[n] != 5000):
+			if (drawing[n][0] < thethingX):
+				thethingX = drawing[n][0]
+				print(thethingX, "is the new X low")
+			if (drawing[n][1] < thethingY):
+				thethingY = drawing[n][1]
+				print(",",thethingY, " is the new Y low")
+		n = n+1
+	
+	n = 0
+	
+	while (n<i):
+		if (drawing[n] != 5000):
+			drawing[n][0] = drawing[n][0] - thethingX
+			drawing[n][1] = drawing[n][1] - thethingY
+			# print(array[n], ",")
+		# elif (array[n] == 5000):
+			# print("5000,")
+		n = n+1
+
+	return drawing
+
+def reformat():
+	global draw
+	drawing = getArray(draw)
+	n = 0
+	i = len(drawing)
+	while (n<i):
+		if (drawing[n] != 5000):
+			drawing[n][0] = drawing[n][0] + 50
+			drawing[n][1] = drawing[n][1] + 50
+			# print(array[n], ",")
+		# elif (array[n] == 5000):
+			# print("5000,")
+		n = n+1
+
+	draw = drawing
+	update()
+
 
 def getDraw():
 	global draw
 	drawing = str(T.get("1.0",END))
 	T.configure(state='disabled')
+	T.config(background="Light Grey")
 
 	draw = eval(drawing)
 	drawing = draw
@@ -65,10 +117,12 @@ def getDraw():
 def update():
 	global draw
 	T.configure(state='normal')
+	T.config(background="White")
 	T.delete('1.0', END)
 	drawz = str(draw)[1:-1]
 	T.insert(INSERT, drawz)
 	T.configure(state='disabled')
+	T.config(background="Light Grey")
 	w.delete("all")
 	getDraw()
 
@@ -76,8 +130,10 @@ def clear():
 	global phase, draw
 	w.delete("all")
 	T.configure(state='normal')
+	T.config(background="White")
 	T.delete('1.0', END)
 	T.configure(state='disabled')
+	T.config(background="Light Grey")
 	draw = []
 	phase = 1
 	print("clear'd")
@@ -85,8 +141,10 @@ def clear():
 def play(z):
 	update()
 	global draw
-	drawing = draw
-	pos = pyautogui.position()
+	drawing = getArray(draw)
+	pos = [0, 1]
+	pos[0] = master.winfo_pointerx()
+	pos[1] = master.winfo_pointery()
 	xx = pos[0]
 	yy = pos[1]
 
@@ -107,13 +165,13 @@ def play(z):
 
 def toggle():
 	global togglevar
-	if (togglevar == 0):
+	if (T['state'] == 'disabled'):
 		T.configure(state='normal')
-		togglevar = 1
-		T.tag_add("sel","1.0","end")
+		T.config(background="White")
+		T.add("sel","1.0","end")
 	else:
 		T.configure(state='disabled')
-		togglevar = 0
+		T.config(background="Light Grey")
 
 def alphaChange(alph):
 	master.wm_attributes('-alpha',int(alph)/100)
@@ -130,11 +188,11 @@ def click():
 master = Tk()
 master.wait_visibility(master)
 master.title('Drawing App')
-master.geometry("800x640+100+100")
+master.geometry("770x410+460+240")
 master.bind('e', callback)
 master.bind('q', split)
 master.bind('z', play)
-w = Canvas(master, bg="White")
+w = Canvas(master, bg="White", cursor="target")
 w.pack(side=RIGHT, fill=BOTH, expand=True)
 okButton = Button(master, text="Record", command=callback, width=30)
 okButton.pack(expand=False, fill=X)
@@ -146,6 +204,8 @@ updateButton = Button(master, text="Update", command=update)
 updateButton.pack(expand=False, fill=X)
 clearButton = Button(master, text="Clear", command=clear)
 clearButton.pack(expand=False, fill=X)
+formatButton = Button(master, text="Format", command=reformat)
+formatButton.pack(expand=False, fill=X)
 toggleButton = Button(master, text="Textbox on/off", command=toggle)
 toggleButton.pack(expand=False, fill=X)
 alphaScale = Scale(master, from_=10, to=100, orient=HORIZONTAL, command=alphaChange, showvalue=0)
